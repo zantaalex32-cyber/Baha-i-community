@@ -1,0 +1,6 @@
+{
+  "name": "ClusterHub",
+  "description": "Bahá'í community tracking tool for cluster information, neighborhood activities, and event schedule management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

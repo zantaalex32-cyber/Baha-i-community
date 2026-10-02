@@ -1,0 +1,134 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidTimestamp(val) {
+      return val is timestamp && val <= request.time;
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId is string && data.userId == request.auth.uid
+        && data.email is string && data.email.size() > 0
+        && data.displayName is string && data.displayName.size() > 0
+        && (!('clusterName' in data) || data.clusterName is string)
+        && (!('neighborhood' in data) || data.neighborhood is string)
+        && (!('role' in data) || data.role is string)
+        && (!('phone' in data) || data.phone is string)
+        && (!('encryptedNotes' in data) || data.encryptedNotes is string)
+        && (!('createdAt' in data) || isValidTimestamp(data.createdAt))
+        && (!('updatedAt' in data) || isValidTimestamp(data.updatedAt));
+    }
+
+    function isValidClusterInfo(data) {
+      return data.id is string && data.id.size() > 0
+        && data.name is string && data.name.size() > 0
+        && data.milestone is string && data.milestone.size() > 0
+        && data.userId is string && data.userId == request.auth.uid
+        && (!('region' in data) || data.region is string)
+        && (!('currentCycle' in data) || data.currentCycle is int)
+        && (!('goalsSummary' in data) || data.goalsSummary is string)
+        && (!('createdAt' in data) || isValidTimestamp(data.createdAt))
+        && (!('updatedAt' in data) || isValidTimestamp(data.updatedAt));
+    }
+
+    function isValidNeighborhood(data) {
+      return data.id is string && data.id.size() > 0
+        && data.name is string && data.name.size() > 0
+        && data.userId is string && data.userId == request.auth.uid
+        && (!('clusterId' in data) || data.clusterId is string)
+        && (!('focusSector' in data) || data.focusSector is string)
+        && (!('facilitatorName' in data) || data.facilitatorName is string)
+        && (!('facilitatorContact' in data) || data.facilitatorContact is string)
+        && (!('activeActivitiesCount' in data) || data.activeActivitiesCount is int)
+        && (!('notes' in data) || data.notes is string)
+        && (!('createdAt' in data) || isValidTimestamp(data.createdAt))
+        && (!('updatedAt' in data) || isValidTimestamp(data.updatedAt));
+    }
+
+    function isValidCoreActivity(data) {
+      return data.id is string && data.id.size() > 0
+        && data.title is string && data.title.size() > 0
+        && data.type is string && data.type.size() > 0
+        && data.userId is string && data.userId == request.auth.uid
+        && (!('clusterId' in data) || data.clusterId is string)
+        && (!('neighborhoodId' in data) || data.neighborhoodId is string)
+        && (!('neighborhoodName' in data) || data.neighborhoodName is string)
+        && (!('animatorOrTutor' in data) || data.animatorOrTutor is string)
+        && (!('meetingDay' in data) || data.meetingDay is string)
+        && (!('location' in data) || data.location is string)
+        && (!('participantsCount' in data) || data.participantsCount is int)
+        && (!('bookOrTopic' in data) || data.bookOrTopic is string)
+        && (!('status' in data) || data.status is string)
+        && (!('createdAt' in data) || isValidTimestamp(data.createdAt))
+        && (!('updatedAt' in data) || isValidTimestamp(data.updatedAt));
+    }
+
+    function isValidEventSchedule(data) {
+      return data.id is string && data.id.size() > 0
+        && data.title is string && data.title.size() > 0
+        && data.category is string && data.category.size() > 0
+        && data.userId is string && data.userId == request.auth.uid
+        && (!('clusterId' in data) || data.clusterId is string)
+        && (!('neighborhoodName' in data) || data.neighborhoodName is string)
+        && (!('dateTimeMillis' in data) || data.dateTimeMillis is int || data.dateTimeMillis is number)
+        && (!('location' in data) || data.location is string)
+        && (!('host' in data) || data.host is string)
+        && (!('description' in data) || data.description is string)
+        && (!('encryptedCoordinationNotes' in data) || data.encryptedCoordinationNotes is string)
+        && (!('attendeesCount' in data) || data.attendeesCount is int)
+        && (!('createdAt' in data) || isValidTimestamp(data.createdAt))
+        && (!('updatedAt' in data) || isValidTimestamp(data.updatedAt));
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUserProfile(request.resource.data);
+      allow update: if isOwner(userId) && isValidUserProfile(request.resource.data);
+      allow delete: if false;
+    }
+
+    match /clusters/{clusterId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidClusterInfo(request.resource.data);
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && isValidClusterInfo(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /neighborhoods/{neighborhoodId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidNeighborhood(request.resource.data);
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && isValidNeighborhood(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /activities/{activityId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidCoreActivity(request.resource.data);
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && isValidCoreActivity(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /events/{eventId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidEventSchedule(request.resource.data);
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && isValidEventSchedule(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with role, assigned neighborhood, and cluster affiliation",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique Firebase Authentication UID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the user"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "Name of the Bahá'í cluster"
+        },
+        "neighborhood": {
+          "type": "string",
+          "description": "Local neighborhood or sector focus"
+        },
+        "role": {
+          "type": "string",
+          "description": "Cluster service role (e.g., Coordinator, Facilitator, Member)"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Encrypted or formatted contact phone number"
+        },
+        "encryptedNotes": {
+          "type": "string",
+          "description": "Client-side AES encrypted confidential coordination notes"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was last updated"
+        }
+      },
+      "required": ["userId", "email", "displayName"]
+    },
+    "ClusterInfo": {
+      "title": "ClusterInfo",
+      "description": "Cluster overview metrics, milestone stage, and goals",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Cluster identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Cluster name (e.g., Northern Cascades Cluster)"
+        },
+        "region": {
+          "type": "string",
+          "description": "Geographical region or province"
+        },
+        "milestone": {
+          "type": "string",
+          "description": "Development milestone (Milestone 1, 2, or 3)"
+        },
+        "currentCycle": {
+          "type": "integer",
+          "description": "Current 3-month cycle of growth number"
+        },
+        "goalsSummary": {
+          "type": "string",
+          "description": "Summary of expansion and consolidation goals"
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the creator or coordinator"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update"
+        }
+      },
+      "required": ["id", "name", "milestone", "userId"]
+    },
+    "Neighborhood": {
+      "title": "Neighborhood",
+      "description": "Neighborhood or focus area within the cluster",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Neighborhood document ID"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Parent cluster ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Neighborhood name"
+        },
+        "focusSector": {
+          "type": "string",
+          "description": "Sector or quadrant classification"
+        },
+        "facilitatorName": {
+          "type": "string",
+          "description": "Lead facilitator or coordinator name"
+        },
+        "facilitatorContact": {
+          "type": "string",
+          "description": "Contact info for neighborhood coordinator"
+        },
+        "activeActivitiesCount": {
+          "type": "integer",
+          "description": "Number of active core activities"
+        },
+        "notes": {
+          "type": "string",
+          "description": "General neighborhood context or history"
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the coordinator who added or manages the neighborhood"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["id", "name", "userId"]
+    },
+    "CoreActivity": {
+      "title": "CoreActivity",
+      "description": "Bahá'í core educational and devotional activities",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Activity document ID"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Associated cluster ID"
+        },
+        "neighborhoodId": {
+          "type": "string",
+          "description": "Associated neighborhood ID"
+        },
+        "neighborhoodName": {
+          "type": "string",
+          "description": "Display name of neighborhood"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title or group name"
+        },
+        "type": {
+          "type": "string",
+          "description": "Activity type: Study Circle, Junior Youth Group, Children's Class, Devotional Gathering, Community Service"
+        },
+        "animatorOrTutor": {
+          "type": "string",
+          "description": "Name of the facilitator, animator, or tutor"
+        },
+        "meetingDay": {
+          "type": "string",
+          "description": "Schedule recurrence (e.g. Saturdays 10:00 AM)"
+        },
+        "location": {
+          "type": "string",
+          "description": "Meeting venue or address"
+        },
+        "participantsCount": {
+          "type": "integer",
+          "description": "Number of active attendees/participants"
+        },
+        "bookOrTopic": {
+          "type": "string",
+          "description": "Ruhi Institute book, theme, or lesson topic"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status: Active, Planning, Completed"
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the facilitator or creator"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Update timestamp"
+        }
+      },
+      "required": ["id", "title", "type", "userId"]
+    },
+    "EventSchedule": {
+      "title": "EventSchedule",
+      "description": "Scheduled events, Feasts, Holy Days, and Reflection Gatherings",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Event document ID"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Associated cluster ID"
+        },
+        "neighborhoodName": {
+          "type": "string",
+          "description": "Host neighborhood name"
+        },
+        "title": {
+          "type": "string",
+          "description": "Event title (e.g. Feast of Mashíyyat, Cluster Reflection Meeting)"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category: Nineteen Day Feast, Holy Day, Cluster Reflection Meeting, Core Activity, Youth Gathering, Special Event"
+        },
+        "dateTimeMillis": {
+          "type": "integer",
+          "description": "Epoch timestamp in milliseconds of the event start time"
+        },
+        "location": {
+          "type": "string",
+          "description": "Event venue, home address, or virtual meeting link"
+        },
+        "host": {
+          "type": "string",
+          "description": "Host family or organizing committee"
+        },
+        "description": {
+          "type": "string",
+          "description": "Public program details, readings, or agenda"
+        },
+        "encryptedCoordinationNotes": {
+          "type": "string",
+          "description": "Client-side encrypted notes (AES-GCM) for confidential logistics/setup"
+        },
+        "attendeesCount": {
+          "type": "integer",
+          "description": "Expected or confirmed RSVP count"
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the creator or schedule coordinator"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Update timestamp"
+        }
+      },
+      "required": ["id", "title", "category", "userId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Individual member profiles indexed by Firebase Auth UID"
+    },
+    "/clusters/{clusterId}": {
+      "schema": "ClusterInfo",
+      "description": "Cluster overview statistics and goals accessible by members"
+    },
+    "/neighborhoods/{neighborhoodId}": {
+      "schema": "Neighborhood",
+      "description": "Neighborhood areas within the cluster for local coordination"
+    },
+    "/activities/{activityId}": {
+      "schema": "CoreActivity",
+      "description": "Core educational and devotional activities in the cluster"
+    },
+    "/events/{eventId}": {
+      "schema": "EventSchedule",
+      "description": "Cluster and neighborhood calendar event schedules"
+    }
+  }
+}
